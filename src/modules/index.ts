@@ -22,6 +22,7 @@ const wrapControlerFunction = (
       next(error);
     }
   };
+  handler['httpMethod'] = controllerFunction['httpMethod'];
   return handler;
 };
 

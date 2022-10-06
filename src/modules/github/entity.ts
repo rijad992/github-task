@@ -3,7 +3,7 @@ import OctokitService from '../../services/octokitService';
 
 class Github {
   readonly octokitService: OctokitService;
-  
+
   constructor({ OctokitService }) {
     this.octokitService = OctokitService;
   }
@@ -11,9 +11,12 @@ class Github {
   getNonForkedUserRepositories = async (username: string) => {
     const repos = (
       (
-        await this.octokitService.octokit.request(`GET /users/${username}/repos`, {
-          username,
-        })
+        await this.octokitService.octokit.request(
+          `GET /users/${username}/repos`,
+          {
+            username,
+          },
+        )
       ).data as NonForkedUserRepos[]
     )
       .map(({ fork, name }) => ({ name, fork }))

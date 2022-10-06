@@ -4,6 +4,8 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
+    "target": "ES5",
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "alwaysStrict": true,
