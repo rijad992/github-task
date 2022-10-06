@@ -18,13 +18,13 @@ const generateApiResponse = () => {
 const generateApiRoutes = () => {
   const router = express.Router();
   const modulesRoutesObject = createApiRoutes();
+  console.log(modulesRoutesObject)
   each(modulesRoutesObject, (controller, moduleName) => {
     each(
       controller,
       (controllerFunction: RequestHandler, controllerFunctionName) => {
-        console.log(`${moduleName}/${controllerFunctionName}`);
         router.get(
-          `/${moduleName}/${controllerFunctionName}`,
+          `/${moduleName.toLowerCase()}/${controllerFunctionName}`,
           controllerFunction,
         );
       },
@@ -32,14 +32,13 @@ const generateApiRoutes = () => {
   });
   return router;
 };
+
+
+
 const initApp = async () => {
   const app = express();
   app.use(slowDown({ windowMs: 60000, delayAfter: 100, delayMs: 5000 }));
-  app.use(
-    '/api',
-    generateApiRoutes(),
-    generateApiResponse(),
-  );
+  app.use('/api', generateApiRoutes(), generateApiResponse());
 
   return app;
 };

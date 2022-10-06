@@ -1,8 +1,9 @@
 import { RequestHandler } from 'express';
 import transform from 'lodash/transform';
+import { container } from '../core/di-container/di-container';
+import { BaseControler } from '../models/BaseController.model';
 import ModuleDiscoveryService from '../services/moduleDiscoveryService';
 import { ControllerRequestHandler } from '../types/controllerRequestHandler.type';
-import { GithubController } from './github/controller';
 
 const wrapControlerFunction = (
   moduleName: string,
@@ -24,27 +25,33 @@ const wrapControlerFunction = (
   return handler;
 };
 
-const createApiRoute = (moduleName: string, controller: GithubController) => {
-  return transform(
-    controller,
-    (moduleApiRoutes, controllerFunction) => {
-      const controllerFunctionName = controllerFunction.name;
-      moduleApiRoutes[controllerFunctionName] = wrapControlerFunction(
+const createApiRoute = (moduleName: string, controller: BaseControler) => {
+  let apiRoutes: Record<string, RequestHandler> = {};
+
+  for (let methodName in controller) {
+    if (typeof controller[methodName] == 'function') {
+      apiRoutes[methodName] = wrapControlerFunction(
         moduleName,
-        controllerFunctionName,
-        controllerFunction,
+        methodName,
+        controller[methodName],
       );
-    },
-    {},
-  );
+    }
+  }
+  return apiRoutes;
 };
 
 const createApiRoutes = () => {
   return transform(
     ModuleDiscoveryService.instance.getModules(),
     (moduleApiRoutes, module) => {
-      const { moduleName, controller } = module;
-      moduleApiRoutes[moduleName] = createApiRoute(moduleName, controller);
+      const { moduleName } = module;
+      const controllerInstance = container.resolve<BaseControler>(
+        `${moduleName}Controller`,
+      );
+      moduleApiRoutes[moduleName] = createApiRoute(
+        moduleName,
+        controllerInstance,
+      );
     },
     {},
   );
