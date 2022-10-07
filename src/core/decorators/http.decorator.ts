@@ -1,13 +1,17 @@
+import { BaseControler } from '../../models/BaseController.model';
 import { Http } from '../enums/http.enum';
 
-function Get(_target, key, descriptor) {
-  let fn = descriptor.value;
-
+function Get(
+  _target: BaseControler,
+  key: PropertyKey,
+  descriptor: PropertyDescriptor,
+): PropertyDescriptor {
+  const fn = descriptor.value;
   return {
     configurable: true,
 
-    get() {
-      let boundFn = fn.bind(this);
+    get(): () => void {
+      const boundFn = fn.bind(this);
       Reflect.defineProperty(this, key, {
         value: boundFn,
         configurable: true,
@@ -19,6 +23,7 @@ function Get(_target, key, descriptor) {
         configurable: false,
         value: Http.GET,
       });
+
       return function () {
         return boundFn.apply(this, arguments);
       };
