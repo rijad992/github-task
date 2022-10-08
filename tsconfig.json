@@ -5,6 +5,7 @@
     "rootDir": ".",
     "outDir": "build",
     "target": "ES5",
+    "module": "commonJs",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -19,5 +20,7 @@
     "noImplicitThis": false,
     "strictNullChecks": false
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*", "__tests__/**/*", "bin/**/*"],
+  "files":["src/core/types/index.d.ts"]
+
 }

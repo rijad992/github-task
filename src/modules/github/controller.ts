@@ -6,6 +6,7 @@ import { Get } from '../../core/decorators/http.decorator';
 
 class GithubController implements BaseControler {
   entity: Github;
+  entityName = 'Github';
 
   constructor({ Github }) {
     this.entity = Github;

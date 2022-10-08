@@ -6,7 +6,7 @@ import { diSetupInit } from '../src/core/di-container/di-container';
 
 dotenv.config();
 
-const www = async () => {
+const www = async (): Promise<void> => {
   diSetupInit();
   await initAppServices();
   const app = await initApp();

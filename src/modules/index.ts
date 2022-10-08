@@ -14,7 +14,6 @@ const wrapControlerFunction = (
     try {
       const moduleFunctionPath = `${moduleName}/${controllerFunctionName}`;
       await controllerFunction(req, res, (responseObj: any, error: Error) => {
-        //@ts-ignore
         req.premadeResponse = { moduleFunctionPath, responseObj };
         next(error);
       });
@@ -27,9 +26,9 @@ const wrapControlerFunction = (
 };
 
 const createApiRoute = (moduleName: string, controller: BaseControler) => {
-  let apiRoutes: Record<string, RequestHandler> = {};
+  const apiRoutes: Record<string, RequestHandler> = {};
 
-  for (let methodName in controller) {
+  for (const methodName in controller) {
     if (typeof controller[methodName] == 'function') {
       apiRoutes[methodName] = wrapControlerFunction(
         moduleName,

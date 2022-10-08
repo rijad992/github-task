@@ -1,22 +1,21 @@
-import express, { RequestHandler } from 'express';
+import express, { Application, RequestHandler, Router } from 'express';
 import slowDown from 'express-slow-down';
 import { each } from 'lodash';
 import { Http } from './core/enums/http.enum';
 import { createApiRoutes } from './modules';
 
-const generateApiResponse = () => {
+const generateApiResponse = (): Router => {
   const router = express.Router();
   router.all('*', (request, response) => {
-    //@ts-ignore
-    const preMadeResponse = request.premadeResponse || {};
+    const preMadeResponse = request.premadeResponse;
     return response
       .status(200)
-      .json({ success: true, data: preMadeResponse.responseObj });
+      .json({ success: true, data: preMadeResponse?.responseObj || {} });
   });
   return router;
 };
 
-const generateApiRoutes = () => {
+const generateApiRoutes = (): Router => {
   const router = express.Router();
   const modulesRoutesObject = createApiRoutes();
 
@@ -46,7 +45,7 @@ const generateApiRoutes = () => {
   return router;
 };
 
-const initApp = async () => {
+const initApp = async (): Promise<Application> => {
   const app = express();
   app.use(slowDown({ windowMs: 60000, delayAfter: 100, delayMs: 5000 }));
   app.use('/api', generateApiRoutes(), generateApiResponse());

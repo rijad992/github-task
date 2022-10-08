@@ -1,1 +1,3 @@
-export interface BaseControler {}
+export interface BaseControler {
+    entityName?: string;
+}

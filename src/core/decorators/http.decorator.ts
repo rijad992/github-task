@@ -25,7 +25,7 @@ function Get(
       });
 
       return function () {
-        return boundFn.apply(this, arguments);
+        return boundFn.apply(this);
       };
     },
   };

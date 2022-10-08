@@ -1,12 +1,13 @@
 import Aigle from 'aigle';
+import path from 'path';
 import { AppModule } from '../models/appModule.model';
-import GithubControllerClass from '../modules/github/controller';
+import { BaseControler } from '../models/BaseController.model';
 import Github from '../modules/github/entity';
 import { globFiles } from '../shared/index';
 
 class ModuleDiscoveryService {
   private static _instance: ModuleDiscoveryService;
-  private _modules: Record<string, AppModule<GithubControllerClass, Github>>;
+  private _modules: Record<string, AppModule<BaseControler, Github>>;
 
   private constructor() {
     if (ModuleDiscoveryService._instance) {
@@ -24,12 +25,10 @@ class ModuleDiscoveryService {
   }
 
   private async getAllModules() {
-    const modulePaths = globFiles('/src/modules/*/index.ts');
-
-    return Aigle.transform<string, AppModule<GithubControllerClass, Github>>(
+    const modulePaths = globFiles(path.join(__dirname, '../modules/*/index.{ts,js}'));
+    return Aigle.transform<string, AppModule<BaseControler, Github>>(
       modulePaths,
       async (result, modulePath) => {
-        //@ts-ignore
         const module = (await import(`${modulePath}`)).default;
         result[module.moduleName] = module;
       },

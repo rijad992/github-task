@@ -6,7 +6,7 @@
     "node": ">= 16.13 <17"
   },
   "scripts": {
-    "start": "node ./src/app.ts",
+    "start": "node ./build/bin/www.js",
     "dev": "nodemon",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
