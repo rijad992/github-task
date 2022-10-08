@@ -7,11 +7,11 @@ class OctokitService {
     this.init();
   }
 
-  get octokit() {
+  get octokit(): Octokit {
     return this._octokit;
   }
 
-  private init() {
+  private init(): void {
     this._octokit = new Octokit({ auth: process.env.GITHUB_ACCESS_TOKEN });
   }
 }

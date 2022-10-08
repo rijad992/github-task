@@ -17,15 +17,19 @@ class ModuleDiscoveryService {
     ModuleDiscoveryService._instance = this;
   }
 
-  static get instance() {
+  static get instance(): ModuleDiscoveryService {
     return (
       ModuleDiscoveryService._instance ??
       (ModuleDiscoveryService._instance = new ModuleDiscoveryService())
     );
   }
 
-  private async getAllModules() {
-    const modulePaths = globFiles(path.join(__dirname, '../modules/*/index.{ts,js}'));
+  private async getAllModules(): Promise<
+    Record<string, AppModule<BaseControler, Github>>
+  > {
+    const modulePaths = globFiles(
+      path.join(__dirname, '../modules/*/index.{ts,js}'),
+    );
     return Aigle.transform<string, AppModule<BaseControler, Github>>(
       modulePaths,
       async (result, modulePath) => {
@@ -36,11 +40,11 @@ class ModuleDiscoveryService {
     );
   }
 
-  async init() {
+  async init(): Promise<void> {
     this._modules = await this.getAllModules();
   }
 
-  getModules() {
+  getModules(): Record<string, AppModule<BaseControler, Github>> {
     return this._modules;
   }
 }

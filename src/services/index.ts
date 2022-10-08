@@ -1,6 +1,6 @@
-import ModuleDiscoveryService from "./moduleDiscoveryService";
+import ModuleDiscoveryService from './moduleDiscoveryService';
 
-const initAppServices = async () => {
+const initAppServices = async (): Promise<void> => {
   await ModuleDiscoveryService.instance.init();
 };
 

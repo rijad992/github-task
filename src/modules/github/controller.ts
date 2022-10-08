@@ -16,7 +16,7 @@ class GithubController implements BaseControler {
   async findNonForkedUserRepositories(
     req: Request,
     _res: Response,
-    next: (responseObj: any, err: Error) => void,
+    next: (responseObj: { name: string; fork: boolean }[], err: Error) => void,
   ): Promise<void> {
     const username = req.query.username as string;
     const repos = await this.entity.getNonForkedUserRepositories(username);

@@ -8,7 +8,9 @@ class Github {
     this.octokitService = OctokitService;
   }
 
-  getNonForkedUserRepositories = async (username: string) => {
+  getNonForkedUserRepositories = async (
+    username: string,
+  ): Promise<{ name: string; fork: boolean }[]> => {
     const repos = (
       (
         await this.octokitService.octokit.request(

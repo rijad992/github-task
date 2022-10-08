@@ -8,15 +8,19 @@ import { ControllerRequestHandler } from '../types/controllerRequestHandler.type
 const wrapControlerFunction = (
   moduleName: string,
   controllerFunctionName: string,
-  controllerFunction: ControllerRequestHandler<any>,
-) => {
+  controllerFunction: ControllerRequestHandler<Record<string, unknown>>,
+): RequestHandler => {
   const handler: RequestHandler = async (req, res, next) => {
     try {
       const moduleFunctionPath = `${moduleName}/${controllerFunctionName}`;
-      await controllerFunction(req, res, (responseObj: any, error: Error) => {
-        req.premadeResponse = { moduleFunctionPath, responseObj };
-        next(error);
-      });
+      await controllerFunction(
+        req,
+        res,
+        (responseObj: Record<string, unknown>, error: Error) => {
+          req.premadeResponse = { moduleFunctionPath, responseObj };
+          next(error);
+        },
+      );
     } catch (error) {
       next(error);
     }
@@ -25,7 +29,10 @@ const wrapControlerFunction = (
   return handler;
 };
 
-const createApiRoute = (moduleName: string, controller: BaseControler) => {
+const createApiRoute = (
+  moduleName: string,
+  controller: BaseControler,
+): Record<string, RequestHandler> => {
   const apiRoutes: Record<string, RequestHandler> = {};
 
   for (const methodName in controller) {
@@ -40,7 +47,7 @@ const createApiRoute = (moduleName: string, controller: BaseControler) => {
   return apiRoutes;
 };
 
-const createApiRoutes = () => {
+const createApiRoutes = (): Record<string, Record<string, RequestHandler>> => {
   return transform(
     ModuleDiscoveryService.instance.getModules(),
     (moduleApiRoutes, module) => {

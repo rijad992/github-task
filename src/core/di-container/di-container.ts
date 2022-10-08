@@ -7,11 +7,11 @@ const container = awilix.createContainer({
   injectionMode: awilix.InjectionMode.PROXY,
 });
 
-function diSetupInit() {
+function diSetupInit(): void {
   container.register({
     GithubController: awilix.asClass(GithubController),
     Github: awilix.asClass(Github),
-    OctokitService: awilix.asClass(OctokitService)
+    OctokitService: awilix.asClass(OctokitService),
   });
 }
 
