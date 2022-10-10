@@ -37,7 +37,6 @@ const generateApiRoutes = (): Router => {
     each(
       controller,
       (controllerFunction: RequestHandler, controllerFunctionName) => {
-        console.log(`/${moduleName.toLowerCase()}/${controllerFunctionName}`);
         switch (controllerFunction['httpMethod']) {
           case Http.GET:
             router.get(
