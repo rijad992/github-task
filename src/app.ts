@@ -12,6 +12,23 @@ import { Http } from './core/enums/http.enum';
 import { createApiRoutes } from './modules';
 import { GeneralError } from './shared/Errors';
 
+const contentTypeMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void | Response => {
+  var contentType = req.headers['content-type'];
+  if (!contentType || contentType !== 'application/json')
+    return res.status(406).json({
+      success: false,
+      data: {
+        status: 406,
+        message: 'App only accepts application/json headers',
+      },
+    });
+  return next();
+};
+
 const generateApiRoutes = (): Router => {
   const router = express.Router();
   const modulesRoutesObject = createApiRoutes();
@@ -50,9 +67,13 @@ const generateApiResponse = (): Router => {
     const preMadeResponse = request.premadeResponse;
 
     if (!preMadeResponse)
-      return response
-        .status(404)
-        .send('Route not found. Please check API documentation.');
+      return response.status(404).json({
+        success: false,
+        data: {
+          status: 404,
+          message: 'Route not found. Please check API documentation.',
+        },
+      });
 
     return response
       .status(200)
@@ -86,6 +107,7 @@ const errorsMiddleware = async (
 const initApp = async (): Promise<Application> => {
   const app = express();
   app.use(slowDown({ windowMs: 60000, delayAfter: 100, delayMs: 5000 }));
+  app.use(contentTypeMiddleware);
   app.use('/api', generateApiRoutes(), generateApiResponse());
   app.use(errorsMiddleware);
   return app;
