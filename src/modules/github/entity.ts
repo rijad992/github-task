@@ -1,4 +1,3 @@
-import { NonForkedUserRepos } from '../../models/NonForkedUserRepos.model';
 import OctokitService from '../../services/octokitService';
 
 class Github {
@@ -11,20 +10,18 @@ class Github {
   getNonForkedUserRepositories = async (
     username: string,
   ): Promise<{ name: string; fork: boolean }[]> => {
-    const repos = (
-      (
-        await this.octokitService.octokit.request(
-          `GET /users/${username}/repos`,
-          {
-            username,
-          },
-        )
-      ).data as NonForkedUserRepos[]
-    )
-      .map(({ fork, name }) => ({ name, fork }))
-      .filter((repo) => !repo.fork);
+    const res = await this.octokitService.octokit.rest.repos.listForUser({
+      username,
+    });
 
-    return repos;
+    const nonForkedRepos = res.data
+      .filter((repo) => !repo.fork)
+      .map(({ name, fork }) => ({
+        name,
+        fork,
+      }));
+
+    return nonForkedRepos;
   };
 }
 
