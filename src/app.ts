@@ -17,7 +17,7 @@ const contentTypeMiddleware = (
   res: Response,
   next: NextFunction,
 ): void | Response => {
-  var contentType = req.headers['content-type'];
+  const contentType = req.headers['content-type'];
   if (!contentType || contentType !== 'application/json')
     return res.status(406).json({
       success: false,

@@ -1,7 +1,7 @@
 import Aigle from 'aigle';
 import path from 'path';
-import { AppModule } from '../models/appModule.model';
-import { BaseControler } from '../models/BaseController.model';
+import { AppModule } from '../core/models/appModule.model';
+import { BaseControler } from '../core/models/BaseController.model';
 import Github from '../modules/github/entity';
 import { globFiles } from '../shared/index';
 

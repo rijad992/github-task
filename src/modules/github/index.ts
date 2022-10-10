@@ -1,5 +1,5 @@
 import Github from './entity';
-import { AppModule } from '../../models/appModule.model';
+import { AppModule } from '../../core/models/appModule.model';
 import GithubController from './controller';
 
 const moduleName = 'Github';

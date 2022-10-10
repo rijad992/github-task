@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import Github from './entity';
 
-import { BaseControler } from '../../models/BaseController.model';
+import { BaseControler } from '../../core/models/BaseController.model';
 import { Get } from '../../core/decorators/http.decorator';
 import { GithubResponseError } from '../../shared/Errors';
-import GithubRequestError from '../../models/GithubRequestError.model';
+import GithubRequestError from '../../core/models/GithubRequestError.model';
+import { NonForkedUserRepos } from '../../core/models/NonForkedUserRepos.model';
 
 class GithubController implements BaseControler {
   entity: Github;
@@ -18,7 +19,7 @@ class GithubController implements BaseControler {
   async findNonForkedUserRepositories(
     req: Request,
     _res: Response,
-    next: (responseObj: { name: string; fork: boolean }[], err: Error) => void,
+    next: (responseObj: NonForkedUserRepos[], err: Error) => void,
   ): Promise<void> {
     try {
       const username = req.query.username as string;

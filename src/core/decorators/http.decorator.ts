@@ -1,4 +1,4 @@
-import { BaseControler } from '../../models/BaseController.model';
+import { BaseControler } from '../models/BaseController.model';
 import { Http } from '../enums/http.enum';
 
 function Get(

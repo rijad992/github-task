@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import transform from 'lodash/transform';
 import { container } from '../core/di-container/di-container';
-import { BaseControler } from '../models/BaseController.model';
+import { BaseControler } from '../core/models/BaseController.model';
 import ModuleDiscoveryService from '../services/moduleDiscoveryService';
 import { ControllerRequestHandler } from '../types/controllerRequestHandler.type';
 
