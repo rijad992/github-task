@@ -18,9 +18,9 @@ jobs:
         env:
           CI: true
   preview:
-    needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: pulumi/setup-pulumi@v3
         name: Install pulumi cli
         with:
