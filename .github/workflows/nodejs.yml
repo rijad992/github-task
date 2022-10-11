@@ -21,8 +21,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Install pulumi cli
       - uses: pulumi/setup-pulumi@v3
+        name: Install pulumi cli
         with:
           command: "preview"
           stack-name: dev
