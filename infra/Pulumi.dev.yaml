@@ -1,3 +1,5 @@
 config:
   aws-native:region: eu-central-1
   aws:region: eu-central-1
+  infra:github_access_token:
+    secure: AAABAIzQ4M5ykmMmYbQiU4ckIIYfYP7ll5wwMlX0Trxa+CQpDZ8CtctBoh0R/NI+wz4OUbxjHLufoFiJz7fORuAdGtR93QMN

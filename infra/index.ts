@@ -1,7 +1,10 @@
-// Copyright 2016-2019, Pulumi Corporation.  All rights reserved.
-
+import * as pulumi from '@pulumi/pulumi';
 import * as awsx from '@pulumi/awsx';
 import { dockerfilePath } from '../Dockerfilepath';
+
+const config = new pulumi.Config();
+
+export const githubAccessToken = config.requireSecret('github_access_token');
 
 // Step 1: Create an ECS Fargate cluster.
 const cluster = new awsx.ecs.Cluster('cluster');
@@ -19,20 +22,27 @@ const web = alb.createListener('web', {
 
 // Step 3: Build and publish a Docker image to a private ECR registry.
 const img = awsx.ecs.Image.fromPath('app-img', dockerfilePath);
-console.log('dfp', dockerfilePath);
+
 // Step 4: Create a Fargate service task that can scale out.
 const appService = new awsx.ecs.FargateService('app-svc', {
   cluster,
   taskDefinitionArgs: {
     container: {
       image: img,
-      cpu: 102 /*10% of 1024*/,
-      memory: 50 /*MB*/,
+      cpu: 102,
+      memory: 50,
       portMappings: [web],
+      environment: [
+        {
+          name: 'GITHUB_ACCESS_TOKEN',
+          value: githubAccessToken,
+        },
+      ],
     },
   },
   desiredCount: 5,
 });
+// Step 4: Create a Fargate service task that can scale out.
 
 // Step 5: Export the Internet address for the service.
 export const url = web.endpoint.hostname;

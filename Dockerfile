@@ -4,6 +4,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+ARG github_access_token=defval
+
 #Rebuild source code
 FROM node:16-alpine AS builder
 WORKDIR /app
@@ -23,7 +25,6 @@ COPY --from=builder /app/node_modules ./node_modules
 USER www
 EXPOSE 3000
 ENV PORT 3000
-ENV GITHUB_ACCESS_TOKEN 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
 
 ENTRYPOINT ["node", "bin/www.js"]
 
