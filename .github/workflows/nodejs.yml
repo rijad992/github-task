@@ -17,16 +17,3 @@ jobs:
       - run: npm run build --if-present
         env:
           CI: true
-  preview:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pulumi/setup-pulumi@v3
-      - name: Install pulumi cli
-      - with:
-          command: "preview"
-          stack-name: dev
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ AWS_SECRET_ACCESS_KEY }}
