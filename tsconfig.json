@@ -21,6 +21,7 @@
     "strictNullChecks": false
   },
   "include": ["src/**/*", "__tests__/**/*", "bin/**/*"],
-  "files":["src/core/types/index.d.ts"]
+  "files":["src/core/types/index.d.ts", "./Dockerfilepath.ts"],
+  "exclude": ["infra/**/*"]
 
 }
