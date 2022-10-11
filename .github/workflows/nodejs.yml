@@ -26,6 +26,9 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     needs: build
+    defaults:
+      run: 
+        working-directory: ./infra
     steps:
       - uses: actions/checkout@v2
 
