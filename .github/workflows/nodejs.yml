@@ -35,7 +35,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: After setting up the Pulumi project specific language environment, we need to install the dependencies also
+      - name: Install infra dependencies
         working-directory: ./infra
         run: npm install
       - name: Configure AWS Credentials
@@ -44,10 +44,38 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: eu-central-1
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - run: npm install
       - uses: pulumi/actions@v3
         with:
           command: preview
+          stack-name: dev
+          work-dir: ./infra
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+  deploy:
+    name: Deploy to aws
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    needs: preview
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install infra dependencies
+        working-directory: ./infra
+        run: npm install
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: eu-central-1
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: pulumi/actions@v3
+        with:
+          command: up
           stack-name: dev
           work-dir: ./infra
         env:
