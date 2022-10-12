@@ -28,7 +28,7 @@ describe('Github', () => {
         const username = 'rijad992';
         const { body } = await supertest(app)
           .get(`/api/github/findnonforkeduserrepositories?username=${username}`)
-          .set('Content-Type', 'application/json')
+          .set('accept', 'application/json')
           .expect(200);
 
         expect(body.success).toBe(true);
