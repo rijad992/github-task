@@ -4,5 +4,5 @@
     "sourceMap": false
   },
   "include": ["src/**/*", "bin/www.ts"],
-  "exclude": ["infra/**/*", "Dockerfilepath.ts"],
+  "exclude": ["infra/**/*", "Dockerfilepath.ts"]
 }

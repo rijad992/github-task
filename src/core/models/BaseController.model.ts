@@ -1,3 +1,3 @@
 export interface BaseControler {
-    entityName?: string;
+  entityName?: string;
 }
