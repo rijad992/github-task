@@ -16,7 +16,7 @@ describe('Github', () => {
           .get(
             `/api/github/findnonforkeduserrepositories?username=${nonExistingUsername}`,
           )
-          .set('Content-Type', 'application/json')
+          .set('accept', 'application/json')
           .expect(404);
       });
 
