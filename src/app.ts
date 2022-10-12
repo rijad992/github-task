@@ -11,13 +11,36 @@ import { each } from 'lodash';
 import { Http } from './core/enums/http.enum';
 import { createApiRoutes } from './modules';
 import { GeneralError } from './shared/Errors';
+import * as swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
+import { globFiles } from './shared';
 
-const contentTypeMiddleware = (
+const generateSwaggerDocs = () => {
+  const controllerPaths = globFiles(
+    path.join(__dirname, '/modules/*/controller.{ts,js}'),
+  );
+  const options = {
+    failOnErrors: true,
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'Github task project',
+        version: '1.0.0',
+      },
+    },
+    apis: controllerPaths,
+  };
+
+  return swaggerJSDoc(options);
+};
+
+const acceptHeaderseMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
 ): void | Response => {
-  const contentType = req.headers['content-type'];
+  const contentType = req.headers['accept'];
   if (!contentType || contentType !== 'application/json')
     return res.status(406).json({
       success: false,
@@ -106,7 +129,9 @@ const errorsMiddleware = async (
 const initApp = async (): Promise<Application> => {
   const app = express();
   app.use(slowDown({ windowMs: 60000, delayAfter: 100, delayMs: 5000 }));
-  app.use(contentTypeMiddleware);
+  app.use('/api-docs', swaggerUi.serve);
+  app.get('/api-docs', swaggerUi.setup(generateSwaggerDocs()));
+  app.use(acceptHeaderseMiddleware);
   app.use('/api', generateApiRoutes(), generateApiResponse());
   app.use(errorsMiddleware);
   return app;
