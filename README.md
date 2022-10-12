@@ -28,7 +28,7 @@ Entity handles business logic.
 Services are defined in services folder and contain logic reused trough modules.
 Core folder contains all core features of the app as types, enums, models, decorators.
 
-App code is locatedin `src folder`. Application starter is inside `bin` folder.
+App code is locatedin `src` folder. Application starter is inside `bin` folder.
 Unit tests are located inside `__tests__`.
 
 Modules, services and entities are registered to di-container on root level of the app.
