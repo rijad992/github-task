@@ -65,7 +65,7 @@ class GithubController implements BaseControler {
    *                               example: 8ff373c1daef5e0d299a02bc783ad64b39e3777d
    *       404:
    *         description: Error response when user is not found
-   *         content: 
+   *         content:
    *           application/json:
    *             schema:
    *               type: object
